@@ -1,0 +1,19 @@
+{
+  "name": "proshop",
+  "version": "1.0.0",
+  "description": "MERN shopping cart app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nnaemekasama/proShop.git"
+  },
+  "author": "Emeka San",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nnaemekasama/proShop/issues"
+  },
+  "homepage": "https://github.com/nnaemekasama/proShop#readme"
+}
