@@ -27,7 +27,7 @@ const ShippingScreen = () => {
         navigate('/payment')
     }
   return (
-    <FormContainer md={10}>
+    <FormContainer>
         <CheckOutSteps step1 step2/>
         <h1>Shipping</h1>
         <Form onSubmit={submitHandler}>
