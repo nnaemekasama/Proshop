@@ -36,7 +36,10 @@ const CartScreen = () => {
     dispatch(removeFromCart(id))
   }
   const checkOutHandler = () => {
-    navigate('/login?redirect=shipping')
+
+   const localUrl = localStorage.getItem('userInfo')
+   localUrl ? navigate('/shipping') : navigate('/login')
+    // STILL GOTTA FIX THIS REDIRECT ISH
   }
 
   return <Row>
