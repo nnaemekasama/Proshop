@@ -29,8 +29,9 @@ const PaymentScreen = () => {
         navigate('/placeorder')
     }
   return (
+    <>
+    <CheckOutSteps step1 step2 step3/>
     <FormContainer>
-        <CheckOutSteps step1 step2 step3/>
         <h1>Payment Method</h1>
         <Form onSubmit={submitHandler}>
             <Form.Group>
@@ -62,6 +63,7 @@ const PaymentScreen = () => {
             </Button>
         </Form>
     </FormContainer>
+    </>
   )
 }
 

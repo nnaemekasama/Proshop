@@ -39,7 +39,7 @@ export const saveShippingAddress = (data) => (dispatch) => {
     localStorage.setItem('shippingAddress', JSON.stringify(data))
   }
 
-export const savePaymentMethod = (data) => (dispatch) => {
+  export const savePaymentMethod = (data) => (dispatch) => {
     dispatch({
       type: CART_SAVE_PAYMENT_METHOD,
       payload: data,
@@ -47,3 +47,5 @@ export const savePaymentMethod = (data) => (dispatch) => {
   
     localStorage.setItem('paymentMethod', JSON.stringify(data))
   }
+
+  
