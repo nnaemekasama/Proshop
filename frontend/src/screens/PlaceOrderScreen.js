@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { Button, Card, Col, Form, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
+import React, {  useEffect } from 'react'
+import {  useNavigate } from 'react-router-dom'
+import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckOutSteps from '../components/CheckOutSteps'
@@ -13,7 +13,7 @@ const PlaceOrderScreen = () => {
 
     const cart = useSelector(state => state.cart)
     let payment = JSON.parse(localStorage.getItem('paymentMethod'))
-    console.log(payment.paymentMethod)
+    
 
     // PRICE CALC.
     const addDecimals = (num) => {
