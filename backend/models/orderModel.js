@@ -65,6 +65,9 @@ const orderSchema = mongoose.Schema ({
     },
     deliveredAt: {
         type: Date
+    },
+    paystackReference: {
+        type: String
     }
 }, {
     timestamps: true
