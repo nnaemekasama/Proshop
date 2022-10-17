@@ -57,6 +57,12 @@ export const getOrderById = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id/pay
 // @access  Private
 
+
+
+// @desc    GET paystackbtn
+// @route   GET /api/
+// @access  Private
+
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
 
     const {id, reference} = req.body
@@ -75,12 +81,22 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
         res.json(update)
     } else{
         res.status(404)
-    throw new Error('Sorry Something Went Wrong')
+    throw new Error('Sorry Something Went')
     }
    } else{
     res.status(404)
     throw new Error('Order not found')
    }
+
+  
+  })
+// @desc    GET loggedIn user order
+// @route   GET /api/orders/myorders
+// @access  Private
+
+export const getMyOrders = asyncHandler(async (req, res) => {
+   const orders = await Order.find({ user: req.user._id })
+   res.json(orders)
 
   
   })
