@@ -5,7 +5,7 @@ import { Button, Table, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listProducts } from '../actions/productActions'
+import { deleteProduct, listProducts } from '../actions/productActions'
 import { useParams } from 'react-router-dom'
 
 export const ProductListScreen = () => {
@@ -17,6 +17,9 @@ export const ProductListScreen = () => {
     const productList = useSelector(state => state.productList)
     const { loading, error, products } = productList
 
+    const productDelete = useSelector(state => state.productDelete)
+    const { loading:loadingDelete, error:errorDelete, success:successDelete} = productDelete
+
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
@@ -27,11 +30,11 @@ export const ProductListScreen = () => {
       } else {
         navigate('/login')
       }
-    }, [dispatch, navigate, userInfo,])
+    }, [dispatch, navigate, userInfo, successDelete])
 
     const deleteHandler = (id) => {
       if(window.confirm('Are you sure')){
-        // DELETE PRODUCTS
+        dispatch(deleteProduct(id))
       }
     }
     const createProductHandler = (product) => {
@@ -51,6 +54,8 @@ export const ProductListScreen = () => {
                 </Button>
             </Col>
         </Row>
+        {loadingDelete && <Loader />}
+        {errorDelete && <Message className='danger'>{errorDelete}</Message>}
           {loading ? (
             <Loader />
           ) : error ? (
