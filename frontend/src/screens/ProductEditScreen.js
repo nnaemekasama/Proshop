@@ -4,8 +4,9 @@ import { Button, Form,  } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listProductDetails } from '../actions/productActions'
+import { listProductDetails, updateProduct } from '../actions/productActions'
 import FormContainer from '../components/FormContainer'
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 
 const ProductEditScreen = () => {
     let params = useParams()
@@ -27,10 +28,16 @@ const ProductEditScreen = () => {
     const productDetails = useSelector(state => state.productDetails)
     const { loading, error, product} = productDetails
 
+    const productUpdate = useSelector(state => state.productUpdate)
+    const { loading:loadingUpdate, error:errorUpdate, success:successUpdate} = productUpdate
+
     
 
     useEffect(()=> {
-        
+        if(successUpdate) {
+            dispatch({ type: PRODUCT_UPDATE_RESET })
+            navigate('/admin/productlist')
+        } else {
             if(!product.name || product._id !== productId) {
                 dispatch(listProductDetails(productId))
             } else {
@@ -42,11 +49,22 @@ const ProductEditScreen = () => {
                 setCountInStock(product.countInStock)
                 setDescription(product.description)  
             }
-    }, [dispatch, product, productId, navigate, ])
+        }
+            
+    }, [dispatch, product, productId, navigate, successUpdate])
 
     const submitHandler = (e) => {
         e.preventDefault()
-        // UPDATE PRODUCT
+        dispatch(updateProduct({
+            _id: productId, 
+            name,
+            price,
+            brand,
+            image,
+            category,
+            description,
+            countInStock
+        }))
     }
 
   return (
@@ -56,6 +74,8 @@ const ProductEditScreen = () => {
         </Link>
         <FormContainer>
         <h1>Edit Product</h1>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
         <Form onSubmit={submitHandler}>
         <Form.Group controlId='name'>
