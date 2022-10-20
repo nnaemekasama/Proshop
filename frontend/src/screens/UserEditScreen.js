@@ -37,7 +37,7 @@ const UserEditScreen = () => {
                 dispatch(getUserDetails(userId))
             } else {
                 setName(user.name)
-                setEmail(user.Email)
+                setEmail(user.email)
                 setIsAdmin(user.isAdmin)
             }
         }
