@@ -5,8 +5,9 @@ import { Button, Table, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { deleteProduct, listProducts } from '../actions/productActions'
+import { createProduct, deleteProduct, listProducts } from '../actions/productActions'
 import { useParams } from 'react-router-dom'
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 export const ProductListScreen = () => {
 
@@ -20,25 +21,35 @@ export const ProductListScreen = () => {
     const productDelete = useSelector(state => state.productDelete)
     const { loading:loadingDelete, error:errorDelete, success:successDelete} = productDelete
 
+    const productCreate = useSelector(state => state.productCreate)
+    const { loading:loadingCreate, error:errorCreate, success:successCreate, product:createdProduct} = productCreate
+
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
 
     useEffect(() => {
-      if(userInfo && userInfo.isAdmin) {
-        dispatch(listProducts())
-      } else {
+      dispatch({ type: PRODUCT_CREATE_RESET })
+
+
+      if(!userInfo.isAdmin) {
         navigate('/login')
+      } 
+
+      if(successCreate) {
+        navigate(`/admin/product/${createdProduct._id}/edit`)
+      } else {
+        dispatch(listProducts())
       }
-    }, [dispatch, navigate, userInfo, successDelete])
+    }, [dispatch, navigate, userInfo, successDelete, successCreate, createdProduct])
 
     const deleteHandler = (id) => {
       if(window.confirm('Are you sure')){
         dispatch(deleteProduct(id))
       }
     }
-    const createProductHandler = (product) => {
-    //   CREATE PRODUCT
+    const createProductHandler = () => {
+      dispatch(createProduct())
     }
 
     return (
@@ -47,7 +58,7 @@ export const ProductListScreen = () => {
             <Col>
                 <h1>Products</h1>
             </Col>
-            <Col className='text-right'>
+            <Col className='text-end'>
                 <Button className='my-3' 
                 onClick={createProductHandler}>
                    <i className='fas fa-plus'></i> Create Product
@@ -56,6 +67,8 @@ export const ProductListScreen = () => {
         </Row>
         {loadingDelete && <Loader />}
         {errorDelete && <Message className='danger'>{errorDelete}</Message>}
+        {loadingCreate && <Loader />}
+        {errorCreate && <Message className='danger'>{errorCreate}</Message>}
           {loading ? (
             <Loader />
           ) : error ? (
