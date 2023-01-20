@@ -1,21 +1,22 @@
 import React, {  useEffect, useState } from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { Link } from 'react-router-dom'
-import { getOrderDetails } from '../actions/orderActions'
+import { deliverOrder, getOrderDetails } from '../actions/orderActions'
 import { PaystackButton } from 'react-paystack'
+import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants'
 
 const OrderScreen = () => {
     const dispatch = useDispatch()
     const params = useParams()
+    const navigate = useNavigate()
     const orderId = params.id 
 
     
-    const [tot, setTot] = useState(null)
     const publicKey = 'pk_test_5bec768bf533463f3ba24cf29085f3e425a6a882'
     const user = JSON.parse(localStorage.getItem('userInfo'))
 
@@ -25,23 +26,37 @@ const OrderScreen = () => {
     const orderDetails = useSelector(state => state.orderDetails)
     const { order, loading, error } = orderDetails
 
+
     const orderPay = useSelector(state => state.orderPay)
     const { loading:loadingPay, success:successPay  } = orderPay
 
-    useEffect( () => {
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo  } = userLogin
 
-       
-        
-        if(!order || successPay) {
-            dispatch(getOrderDetails(orderId))
-        } 
-        
-        setTot(parseInt(order?.totalPrice) * 100)
+    const orderDeliver = useSelector(state => state.orderDeliver)
+    const { loading:loadingDeliver, success:successDeliver  } = orderDeliver
 
-        
-    },[dispatch, orderId, successPay, order])
+  
+    useEffect(() => {
+        // if (!order || successPay) {
+        //   dispatch({ type: ORDER_PAY_RESET });
+        //   if (!order || order._id === id) {
+        //     dispatch(getOrderDetails(id));
+        //   }
+        // }
+        if (!userInfo) {
+          navigate("/login");
+        }
+        if (successDeliver) {
+          dispatch({ type: ORDER_DELIVER_RESET });
+        }
+        dispatch({ type: ORDER_PAY_RESET });
+        dispatch(getOrderDetails(orderId));
+      }, [dispatch, successDeliver, userInfo, orderId, navigate]);
 
- 
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order))
+    }
 
     if (!loading) {
         //   Calculate prices
@@ -57,7 +72,7 @@ const OrderScreen = () => {
 
       const componentProps = {
         email: user.email,
-        amount: tot,
+        amount: parseInt(order?.totalPrice) * 100,
         metadata: {
           name: user.name,
           phone: 123456789,
@@ -180,12 +195,33 @@ const OrderScreen = () => {
                             <Col>${order.totalPrice}</Col>
                         </Row>
                     </ListGroup.Item>
-                    <ListGroup.Item>
-                        <Row>
-                            <PaystackButton {...componentProps} />
-                        </Row>
-                    </ListGroup.Item>
-            
+
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  <Row>
+                    {loadingPay && <Loader />}
+                    {error && <Message>{error}</Message>}
+                    <PaystackButton {...componentProps} className="paystack" />
+                  </Row>
+                </ListGroup.Item>
+              )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Button
+                        type="button"
+                        className="btn btn-block"
+                        onClick={deliverHandler}
+                      >
+                        Mark As Shipped
+                      </Button>
+                    </Row>
+                  </ListGroup.Item>
+                )}
                 </ListGroup>
             </Card>
         </Col>
