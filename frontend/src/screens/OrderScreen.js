@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react'
+import React, {  useEffect,  } from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap'
@@ -71,10 +71,10 @@ const OrderScreen = () => {
 
 
       const componentProps = {
-        email: user.email,
+        email: user?.email || `null`,
         amount: parseInt(order?.totalPrice) * 100,
         metadata: {
-          name: user.name,
+          name: user?.name || `null`,
           phone: 123456789,
         },
         publicKey,
