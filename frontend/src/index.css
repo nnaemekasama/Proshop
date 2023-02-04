@@ -17,3 +17,53 @@ h3 {
     margin: 0.1rem;
 }
 
+.paystack {
+    cursor: pointer;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    background-color: #212e52;
+    font-weight: bold;
+    color: #e0eafc;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    height: 45px;
+  }
+  
+  /* carousel */
+  .carousel-item-next,
+  .carousel-item-prev,
+  .carousel-item-active {
+    display: flex;
+  }
+  .carousel-caption {
+    position: absolute;
+    top: 0;
+  }
+  .carousel-caption h2 {
+    color: #fff;
+  }
+  
+  .carousel img {
+    display: flex;
+    justify-content: center;
+    height: 300px;
+    padding: 30px;
+    margin: 40px auto;
+    border-radius: 50%;
+  }
+  
+  .carousel a {
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 700px) {
+    .carousel img {
+      height: 280px;
+    }
+    .carousel-caption h2 {
+      font-size: x-small;
+    }
+  }
