@@ -37,7 +37,18 @@ const OrderScreen = () => {
     const { loading:loadingDeliver, success:successDeliver  } = orderDeliver
 
   
-    useEffect(() => {
+
+
+    // if (!loading) {
+    //     function addDecimals(number) {
+    //       return (Math.round(number * 100) / 100).toFixed(2);
+    //     }
+    //     order.itemsPrice = addDecimals(
+    //       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    //     );
+    //   }
+
+      useEffect(() => {
         // if (!order || successPay) {
         //   dispatch({ type: ORDER_PAY_RESET });
         //   if (!order || order._id === id) {
@@ -57,17 +68,6 @@ const OrderScreen = () => {
     const deliverHandler = () => {
         dispatch(deliverOrder(order))
     }
-
-    if (!loading) {
-        //   Calculate prices
-        const addDecimals = (num) => {
-          return (Math.round(num * 100) / 100).toFixed(2)
-        }
-    
-        order.itemsPrice = addDecimals(
-          order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-        )
-      }
 
 
       const componentProps = {

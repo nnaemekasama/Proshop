@@ -33,7 +33,7 @@ export const ProductListScreen = () => {
       dispatch({ type: PRODUCT_CREATE_RESET })
 
 
-      if(!userInfo.isAdmin) {
+      if(!userInfo?.isAdmin) {
         navigate('/login')
       } 
 
